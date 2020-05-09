@@ -3,6 +3,8 @@ require "binary_tree_builder/version"
 module BinaryTreeBuilder
   class Main
     FILE_NAME='result.txt'
+    NODE_BIT = 0
+    LEAF_BIT = 1
 
     attr_accessor :root
 
@@ -33,13 +35,13 @@ module BinaryTreeBuilder
         tmp = output_each(tmp, node[:left])
       else 
         tmp = tmp << 1
-        tmp += 1
+        tmp += LEAF_BIT
       end
       if !node[:right].nil?
         tmp = output_each(tmp, node[:right])
       else 
         tmp = tmp << 1
-        tmp += 1
+        tmp += LEAF_BIT
       end
       tmp = tmp << 1
       return tmp
@@ -84,6 +86,38 @@ module BinaryTreeBuilder
       v = v - ((v >> 1) & 0x55555555)
       v = (v & 0x33333333) + ((v >> 2) & 0x33333333)
       ((v + (v >> 4) & 0xF0F0F0F) * 0x1010101) >> 24
+    end
+
+    def tree_num_to_tree_hash(tree_num)
+      mask = 1
+      tmp_tree_num = tree_num
+
+      this_node_num = tree_num[0]
+      right_num = tmp_tree_num[1]
+      left_num = tmp_tree_num[2]
+      tmp_tree_num = tmp_tree_num >> 3
+
+      tmp_tree_num, right = if right_num == NODE_BIT
+        # right 自身を表す bit (0) を付け加えておく
+        tree_num_to_tree_hash(tmp_tree_num << 1)
+      else
+        [tmp_tree_num, nil]
+      end
+
+      tmp_tree_num, left = if left_num == NODE_BIT
+        # left 自身を表す bit (0) を付け加えておく
+        tree_num_to_tree_hash(tmp_tree_num << 1)
+      else
+        [tmp_tree_num, nil]
+      end
+      
+
+      return [
+        tmp_tree_num,{
+          right: right,
+          left: left
+        }
+      ]
     end
   end
 end
