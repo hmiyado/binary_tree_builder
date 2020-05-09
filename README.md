@@ -4,33 +4,61 @@ Welcome to your new gem! In this directory, you'll find the files you need to be
 
 TODO: Delete this and the text above, and describe your gem
 
-## Installation
+## これは何
 
-Add this line to your application's Gemfile:
+二分木が取りうる構造を整数値として表現したものを出力するスクリプトおよびその出力結果。
 
-```ruby
-gem 'binary_tree_builder'
+### 二分木と整数値の対応
+
+以下の手順で生成されるビット列で表される整数値によって、二分木の構造を表す。
+
+- 二分木のノードを0、葉を1とする
+- 深さ優先でノード・葉を訪ねた順に上位からビット列を並べる
+
+#### 二分木と整数値の対応例
+
+便宜上、リストの上に書かれているものが左の子とする。
+
+##### ノードが1個のとき
+
+```
+- 0
+  - 1
+  - 1
 ```
 
-And then execute:
+この木からは `110` というビット列が得られ、整数値は `6` となる。
+ノードが1個のとき、この値が唯一の整数値である（これ以外の構造がない）。
 
-    $ bundle install
+##### ノードが2個のとき
 
-Or install it yourself as:
+```
+- 0
+  - 1
+  - 0
+    - 1
+    - 1
+```
 
-    $ gem install binary_tree_builder
+この木からは `11010` というビット列が得られ、整数値は `26` となる。
 
-## Usage
+```
+- 0
+  - 0
+    - 1
+    - 1
+  - 1
+```
 
-TODO: Write usage instructions here
+この木からは `11100` というビット列が得られ、整数値は `28` となる。
 
-## Development
+#### 所々の性質
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/binary_tree_builder.
-
+- 整数値はすべて偶数となる。なぜなら、木の根（最も上位）はノード（0）となるため。
+- 最上位ビットは1となる。なぜなら、深さ優先で探索するため最初に訪問するのが葉（1）となるため。
+- ビット列として表したとき、ビット列の長さは `2*ノードの個数 + 1` となる。
+  -  0 の個数がノードの個数と等しく、 1 の個数が葉の個数と等しい。
+  - 葉の個数はノードの個数に1加えた数に等しい。
+  - 以上から、`ビット列の長さ = ノードの個数 + 葉の個数 = ノードの個数 + ノードの個数 + 1 = 2*ノードの個数 + 1`
+- あるノードの個数に対して、得られる整数値の個数（二分木の構造の総数）はカタラン数に等しい。
+  - https://ja.wikipedia.org/wiki/%E3%82%AB%E3%82%BF%E3%83%A9%E3%83%B3%E6%95%B0
