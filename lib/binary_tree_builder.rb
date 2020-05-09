@@ -9,7 +9,7 @@ module BinaryTreeBuilder
     attr_accessor :root
 
     def create_new_binary_tree
-      tree_nums = extract_tree_nums_with_max_num_of_nodes()
+      tree_nums, num_of_nodes = extract_tree_nums_with_max_num_of_nodes()
       p tree_nums
       puts "num of trees: #{tree_nums.length}"
 
@@ -22,6 +22,7 @@ module BinaryTreeBuilder
       p @memo
       puts "num of new trees: #{@memo.length}"
       output_all_tree_num()
+      output_tree_num_by_num_of_nodes(num_of_nodes + 1)
     end
 
     def add_node_to_binary_tree(node)
@@ -79,7 +80,7 @@ module BinaryTreeBuilder
           end
         }
       }
-      tree_nums
+      [tree_nums, max_num_of_nodes]
     end
 
     def num_of_nodes(tree_num)
@@ -132,6 +133,14 @@ module BinaryTreeBuilder
 
     def output_all_tree_num()
       File.open(FILE_NAME, "a+") { |f|
+        @memo.each do |tree_num|
+          f.puts(tree_num)
+        end
+      }
+    end
+
+    def output_tree_num_by_num_of_nodes(num_of_nodes)
+      File.open("tree_num_with_nodes_#{num_of_nodes}.txt", "w") { |f|
         @memo.each do |tree_num|
           f.puts(tree_num)
         end
