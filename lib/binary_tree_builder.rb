@@ -11,13 +11,16 @@ module BinaryTreeBuilder
     def create_new_binary_tree
       tree_nums = extract_tree_nums_with_max_num_of_nodes()
       p tree_nums
+      puts "num of trees: #{tree_nums.length}"
 
       @memo = []
       tree_nums.each do |e|
         residue, @root = tree_num_to_tree_hash(e)
         add_node_to_binary_tree(@root)
       end
-
+      @memo = @memo.sort.uniq
+      p @memo
+      puts "num of new trees: #{@memo.length}"
       output_all_tree_num()
     end
 
@@ -86,10 +89,13 @@ module BinaryTreeBuilder
     end
 
     # 立っている bit の個数を数える
-    def pop_count(v)
-      v = v - ((v >> 1) & 0x55555555)
-      v = (v & 0x33333333) + ((v >> 2) & 0x33333333)
-      ((v + (v >> 4) & 0xF0F0F0F) * 0x1010101) >> 24
+    def pop_count(x)
+      b = 0
+      while x > 0
+        x &= x - 1
+        b += 1
+      end
+      return b
     end
 
     def tree_num_to_tree_hash(tree_num)
@@ -126,7 +132,7 @@ module BinaryTreeBuilder
 
     def output_all_tree_num()
       File.open(FILE_NAME, "a+") { |f|
-        @memo.sort!.uniq!.each do |tree_num|
+        @memo.each do |tree_num|
           f.puts(tree_num)
         end
       }

@@ -42,6 +42,14 @@ RSpec.describe BinaryTreeBuilder do
     expect(BinaryTreeBuilder::Main.new().num_of_nodes(28)).to eq(2)
   end
 
+  it "should answer that node num is 5 when tree num is 1706" do
+    expect(BinaryTreeBuilder::Main.new().num_of_nodes(1706)).to eq(5)
+  end
+
+  it "should answer that node num is 5 when tree num is 1834" do
+    expect(BinaryTreeBuilder::Main.new().num_of_nodes(1834)).to eq(5)
+  end
+
   it "should return correct tree hash when tree_num is 6(1 node)" do
     residue, tree_hash = BinaryTreeBuilder::Main.new().tree_num_to_tree_hash(6)
     expect(tree_hash).to eq({left: nil, right: nil})
