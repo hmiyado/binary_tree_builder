@@ -2,11 +2,14 @@ require "binary_tree_builder/version"
 
 module BinaryTreeBuilder
   class Main
-    attr_accessor :root, :num_of_nodes
+    FILE_NAME='result.txt'
+
+    attr_accessor :root
 
     def create_new_binary_tree
-      @root = {      }
-      add_node_to_binary_tree(@root)
+      tree_nums = extract_tree_nums_with_max_num_of_nodes()
+      p tree_nums
+      # add_node_to_binary_tree(@root)
     end
 
     def add_node_to_binary_tree(node)
@@ -44,9 +47,43 @@ module BinaryTreeBuilder
 
     def output_all()
       all_num = output_each(0, @root)
-      File.open("result.txt", "a+") { |f|
+      File.open(FILE_NAME, "a+") { |f|
         f.puts(all_num)
       }
+    end
+
+    def extract_tree_nums_with_max_num_of_nodes()
+      max_num_of_nodes = 0
+      # 6 はノードが1個のときの tree_num
+      tree_nums = [6]
+      File.open(FILE_NAME, "r") { |f| 
+        f.each { |line|
+          tree_num = line.to_i
+          num_of_nodes = num_of_nodes(tree_num)
+          if num_of_nodes > max_num_of_nodes
+            # 更新
+            max_num_of_nodes = num_of_nodes
+            tree_nums = [tree_num]
+          elsif num_of_nodes == max_num_of_nodes
+            # 追加
+            tree_nums << tree_num
+          end
+        }
+      }
+      tree_nums
+    end
+
+    def num_of_nodes(tree_num)
+      # 立っている bit の個数: 葉の個数
+      # ノードの個数: 葉の個数 - 1
+      pop_count(tree_num) - 1
+    end
+
+    # 立っている bit の個数を数える
+    def pop_count(v)
+      v = v - ((v >> 1) & 0x55555555)
+      v = (v & 0x33333333) + ((v >> 2) & 0x33333333)
+      ((v + (v >> 4) & 0xF0F0F0F) * 0x1010101) >> 24
     end
   end
 end

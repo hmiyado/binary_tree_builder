@@ -29,4 +29,16 @@ RSpec.describe BinaryTreeBuilder do
       }
     })).to eq(28)
   end
+
+  it "should answer that node num is 1 when tree num is 6" do
+    expect(BinaryTreeBuilder::Main.new().num_of_nodes(6)).to eq(1)
+  end
+
+  it "should answer that node num is 2 when tree num is 26" do
+    expect(BinaryTreeBuilder::Main.new().num_of_nodes(26)).to eq(2)
+  end
+
+  it "should answer that node num is 2 when tree num is 28" do
+    expect(BinaryTreeBuilder::Main.new().num_of_nodes(28)).to eq(2)
+  end
 end
