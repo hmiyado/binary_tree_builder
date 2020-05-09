@@ -4,14 +4,14 @@ RSpec.describe BinaryTreeBuilder do
   end
 
   it "output 6 for {left: nil, right: nil}" do
-    expect(BinaryTreeBuilder::Main.new().output_each(0, {
+    expect(BinaryTreeBuilder::Main.new().tree_hash_to_tree_num(0, {
       left: nil,
       right: nil
     })).to eq(6)
   end
 
   it "output 26 for {left: {left: nil, right: nil}, right: nil}" do
-    expect(BinaryTreeBuilder::Main.new().output_each(0, {
+    expect(BinaryTreeBuilder::Main.new().tree_hash_to_tree_num(0, {
       left: {
         left: nil,
         right: nil
@@ -21,7 +21,7 @@ RSpec.describe BinaryTreeBuilder do
   end
 
   it "output 28 for {left: nil, right: {left: nil, right: nil}}" do
-    expect(BinaryTreeBuilder::Main.new().output_each(0, {
+    expect(BinaryTreeBuilder::Main.new().tree_hash_to_tree_num(0, {
       left: nil,
       right: {
         left: nil,

@@ -11,7 +11,14 @@ module BinaryTreeBuilder
     def create_new_binary_tree
       tree_nums = extract_tree_nums_with_max_num_of_nodes()
       p tree_nums
-      # add_node_to_binary_tree(@root)
+
+      @memo = []
+      tree_nums.each do |e|
+        residue, @root = tree_num_to_tree_hash(e)
+        add_node_to_binary_tree(@root)
+      end
+
+      output_all_tree_num()
     end
 
     def add_node_to_binary_tree(node)
@@ -23,22 +30,22 @@ module BinaryTreeBuilder
             left: nil,
             right: nil
           }
-          output_all()
+          add_tree_num_to_memo()
           node[branch] = nil
         end
       end
     end
 
-    def output_each(current_num, node)
+    def tree_hash_to_tree_num(current_num, node)
       tmp = current_num
       if !node[:left].nil?
-        tmp = output_each(tmp, node[:left])
+        tmp = tree_hash_to_tree_num(tmp, node[:left])
       else 
         tmp = tmp << 1
         tmp += LEAF_BIT
       end
       if !node[:right].nil?
-        tmp = output_each(tmp, node[:right])
+        tmp = tree_hash_to_tree_num(tmp, node[:right])
       else 
         tmp = tmp << 1
         tmp += LEAF_BIT
@@ -47,11 +54,8 @@ module BinaryTreeBuilder
       return tmp
     end
 
-    def output_all()
-      all_num = output_each(0, @root)
-      File.open(FILE_NAME, "a+") { |f|
-        f.puts(all_num)
-      }
+    def add_tree_num_to_memo()
+      @memo << tree_hash_to_tree_num(0, @root)
     end
 
     def extract_tree_nums_with_max_num_of_nodes()
@@ -118,6 +122,14 @@ module BinaryTreeBuilder
           left: left
         }
       ]
+    end
+
+    def output_all_tree_num()
+      File.open(FILE_NAME, "a+") { |f|
+        @memo.sort!.uniq!.each do |tree_num|
+          f.puts(tree_num)
+        end
+      }
     end
   end
 end
